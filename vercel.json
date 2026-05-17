@@ -16,7 +16,5 @@
       "description": "Supabase public API key (anon key)",
       "value": "@supabase_key"
     }
-  ],
-  "buildOutputDirectory": ".next",
-  "outputDirectory": ".next"
+  ]
 }
