@@ -6,13 +6,7 @@
   "installCommand": "npm install",
   "framework": "nextjs",
   "env": {
-    "NEXT_PUBLIC_SUPABASE_URL": {
-      "description": "Supabase project URL",
-      "value": "@supabase_url"
-    },
-    "NEXT_PUBLIC_SUPABASE_ANON_KEY": {
-      "description": "Supabase public API key (anon key)",
-      "value": "@supabase_key"
-    }
+    "NEXT_PUBLIC_SUPABASE_URL": "Supabase project URL",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "Supabase public API key (anon key)"
   }
 }
