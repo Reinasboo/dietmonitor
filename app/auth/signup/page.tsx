@@ -9,9 +9,9 @@ export default function SignupPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const supabase = createClient();
 
   const handleSignup = async (email: string, password: string) => {
+    const supabase = createClient();
     setIsLoading(true);
     setError(null);
 
@@ -37,5 +37,5 @@ export default function SignupPage() {
     }
   };
 
-  return <SignupForm type="signup" onSubmit={handleSignup} isLoading={isLoading} error={error} />;
+  return <SignupForm type="signup" onSubmit={handleSignup} isLoading={isLoading} error={error ?? undefined} />;
 }

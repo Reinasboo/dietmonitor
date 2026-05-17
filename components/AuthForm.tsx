@@ -99,7 +99,7 @@ export function LoginForm(props: LoginProps) {
       </div>
       <AuthForm {...props} />
       <p className="text-sm text-gray-600">
-        Don't have an account?{' '}
+        Don&apos;t have an account?{' '}
         <Link href="/auth/signup" className="font-semibold text-lilac-600 hover:text-lilac-700">
           Sign up
         </Link>

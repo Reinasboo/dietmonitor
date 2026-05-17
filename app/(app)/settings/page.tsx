@@ -7,13 +7,14 @@ import { Button, Input } from '@/components';
 import { ArrowLeft, Lock, User } from 'lucide-react';
 
 export default function SettingsPage() {
-  const supabase = createClient();
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [timezone, setTimezone] = useState('UTC');
   const [isSaving, setSaving] = useState(false);
 
   useEffect(() => {
+    const supabase = createClient();
+
     const fetchUser = async () => {
       setLoading(true);
       try {
@@ -37,6 +38,7 @@ export default function SettingsPage() {
         if (data && !error) {
           setTimezone(data.timezone);
         }
+        if (error) throw new Error(error.message);
       } catch (err) {
         console.error('Failed to load settings:', err);
       } finally {
@@ -45,9 +47,10 @@ export default function SettingsPage() {
     };
 
     fetchUser();
-  }, [supabase]);
+  }, []);
 
   const handleSavePreferences = async () => {
+    const supabase = createClient();
     setSaving(true);
     try {
       const {
@@ -69,7 +72,7 @@ export default function SettingsPage() {
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) throw new Error(error.message);
     } catch (err) {
       console.error('Failed to save preferences:', err);
     } finally {
@@ -150,7 +153,7 @@ export default function SettingsPage() {
           <div>
             <h2 className="text-sm font-semibold text-gray-900 mb-md">Privacy</h2>
             <p className="text-xs text-gray-600 mb-lg">
-              Your data is private by default. We don't share, sell, or track anything.
+              Your data is private by default. We don&apos;t share, sell, or track anything.
             </p>
             <p className="text-xs text-gray-500">
               All your food entries are encrypted and stored securely. Only you can access them.

@@ -8,13 +8,14 @@ import { Entry } from '@/lib/patterns';
 import { LogForm, TimelineDay, EmptyState, LoadingDay } from '@/components';
 
 export default function HomePage() {
-  const supabase = createClient();
   const { entries, loading, error, setEntries, setLoading, setError, addEntry, removeEntry, updateEntry } =
     useEntryStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Fetch entries on mount
   useEffect(() => {
+    const supabase = createClient();
+
     const fetchEntries = async () => {
       setLoading(true);
       try {
@@ -33,7 +34,7 @@ export default function HomePage() {
           .eq('user_id', session.user.id)
           .order('logged_at', { ascending: false });
 
-        if (fetchError) throw fetchError;
+        if (fetchError) throw new Error(fetchError.message);
         setEntries(data || []);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to fetch entries');
@@ -43,9 +44,10 @@ export default function HomePage() {
     };
 
     fetchEntries();
-  }, [supabase, setEntries, setLoading, setError]);
+  }, [setEntries, setLoading, setError]);
 
   const handleLogEntry = async (content: string, loggedAt: Date) => {
+    const supabase = createClient();
     setIsSubmitting(true);
     try {
       const {
@@ -69,7 +71,7 @@ export default function HomePage() {
         .select()
         .single();
 
-      if (insertError) throw insertError;
+      if (insertError) throw new Error(insertError.message);
       addEntry(data as Entry);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to log entry');
@@ -79,10 +81,11 @@ export default function HomePage() {
   };
 
   const handleDeleteEntry = async (id: string) => {
+    const supabase = createClient();
     try {
       const { error: deleteError } = await supabase.from('entries').delete().eq('id', id);
 
-      if (deleteError) throw deleteError;
+      if (deleteError) throw new Error(deleteError.message);
       removeEntry(id);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to delete entry');
@@ -90,6 +93,7 @@ export default function HomePage() {
   };
 
   const handleUpdateEntry = async (id: string, content: string, loggedAt: string) => {
+    const supabase = createClient();
     try {
       const { error: updateError } = await supabase
         .from('entries')
@@ -99,8 +103,11 @@ export default function HomePage() {
         })
         .eq('id', id);
 
-      if (updateError) throw updateError;
-      updateEntry(id, content, loggedAt);
+      if (updateError) throw new Error(updateError.message);
+      updateEntry(id, {
+        content,
+        logged_at: loggedAt,
+      });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to update entry');
     }

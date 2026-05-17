@@ -1,9 +1,5 @@
-import type { NextConfig } from 'next';
-
-const nextConfig: NextConfig = {
-  typescript: {
-    strictNullChecks: true,
-  },
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   headers: async () => [
     {
       source: '/(.*)',
@@ -25,4 +21,4 @@ const nextConfig: NextConfig = {
   ],
 };
 
-export default nextConfig;
+module.exports = nextConfig;

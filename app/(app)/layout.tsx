@@ -12,15 +12,17 @@ export default function AppLayout({
 }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
-  const supabase = createClient();
 
   useEffect(() => {
+    const supabase = createClient();
+
     const checkAuth = async () => {
       const {
         data: { session },
       } = await supabase.auth.getSession();
 
       if (!session) {
+        setIsLoading(false);
         router.push('/auth/login');
       } else {
         setIsLoading(false);
@@ -31,16 +33,17 @@ export default function AppLayout({
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
+    } = supabase.auth.onAuthStateChange((_event, session) => {
       if (!session) {
         router.push('/auth/login');
       }
     });
 
     return () => subscription.unsubscribe();
-  }, [router, supabase.auth]);
+  }, [router]);
 
   const handleLogout = async () => {
+    const supabase = createClient();
     await supabase.auth.signOut();
     router.push('/auth/login');
   };

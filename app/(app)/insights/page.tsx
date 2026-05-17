@@ -8,12 +8,13 @@ import { getMondayOfWeek } from '@/lib/date-utils';
 import { Lightbulb } from 'lucide-react';
 
 export default function InsightsPage() {
-  const supabase = createClient();
   const [insights, setInsights] = useState<Insight[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    const supabase = createClient();
+
     const fetchInsights = async () => {
       setLoading(true);
       try {
@@ -37,7 +38,7 @@ export default function InsightsPage() {
           .gte('logged_at', weekAgo.toISOString())
           .order('logged_at', { ascending: false });
 
-        if (fetchError) throw fetchError;
+        if (fetchError) throw new Error(fetchError.message);
 
         const generatedInsights = generateInsights((data || []) as Entry[]);
         setInsights(generatedInsights);
@@ -49,7 +50,7 @@ export default function InsightsPage() {
     };
 
     fetchInsights();
-  }, [supabase]);
+  }, []);
 
   return (
     <div className="space-y-2xl">

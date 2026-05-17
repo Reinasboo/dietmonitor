@@ -10,10 +10,14 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: 'Mindful — Private Food Logging',
   description: 'No judgment, just awareness. A private food logging app.',
-  viewport: 'width=device-width, initial-scale=1',
   icons: {
     icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="75" font-size="75">🧠</text></svg>',
   },
+};
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
 };
 
 export default function RootLayout({

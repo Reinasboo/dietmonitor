@@ -1,4 +1,4 @@
-import { parseISO, getHour, getMinutes, differenceInDays, startOfDay } from 'date-fns';
+import { parseISO, getHours, getMinutes, startOfDay } from 'date-fns';
 
 export interface Entry {
   id: string;
@@ -20,7 +20,7 @@ export interface Insight {
  */
 export function detectLateNightEating(entries: Entry[]): Insight | null {
   const lateNightEntries = entries.filter((entry) => {
-    const hour = getHour(parseISO(entry.logged_at));
+    const hour = getHours(parseISO(entry.logged_at));
     return hour >= 23 || hour < 3;
   });
 
@@ -28,7 +28,7 @@ export function detectLateNightEating(entries: Entry[]): Insight | null {
 
   const times = lateNightEntries.map((e) => {
     const date = parseISO(e.logged_at);
-    const hour = getHour(date);
+    const hour = getHours(date);
     const minutes = getMinutes(date);
     return `${hour === 0 ? 12 : hour > 12 ? hour - 12 : hour}:${minutes.toString().padStart(2, '0')} ${hour < 12 ? 'AM' : 'PM'}`;
   });
@@ -45,7 +45,7 @@ export function detectLateNightEating(entries: Entry[]): Insight | null {
  */
 export function detectEarlyMorningEating(entries: Entry[]): Insight | null {
   const earlyEntries = entries.filter((entry) => {
-    const hour = getHour(parseISO(entry.logged_at));
+    const hour = getHours(parseISO(entry.logged_at));
     return hour >= 5 && hour < 8;
   });
 

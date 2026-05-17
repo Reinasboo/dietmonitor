@@ -9,9 +9,9 @@ export default function LoginPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const supabase = createClient();
 
   const handleLogin = async (email: string, password: string) => {
+    const supabase = createClient();
     setIsLoading(true);
     setError(null);
 
@@ -33,5 +33,5 @@ export default function LoginPage() {
     }
   };
 
-  return <LoginForm type="login" onSubmit={handleLogin} isLoading={isLoading} error={error} />;
+  return <LoginForm type="login" onSubmit={handleLogin} isLoading={isLoading} error={error ?? undefined} />;
 }

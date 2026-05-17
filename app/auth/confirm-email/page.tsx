@@ -10,7 +10,7 @@ export default function ConfirmEmailPage() {
       <div>
         <h1 className="text-3xl font-bold text-gray-900 mb-md">Check your email</h1>
         <p className="text-gray-600 max-w-xs mx-auto">
-          We've sent you a confirmation link. Click it to activate your account.
+          We&apos;ve sent you a confirmation link. Click it to activate your account.
         </p>
       </div>
 
