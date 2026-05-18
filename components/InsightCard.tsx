@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { Insight } from '@/lib/patterns';
-import { Lightbulb } from 'lucide-react';
 import clsx from 'clsx';
 
 interface InsightCardProps {
@@ -10,6 +9,8 @@ interface InsightCardProps {
 }
 
 export function InsightCard({ insight }: InsightCardProps) {
+  const confidence = insight.confidence ?? 'medium';
+
   const getIcon = () => {
     switch (insight.type) {
       case 'late_night':
@@ -73,13 +74,31 @@ export function InsightCard({ insight }: InsightCardProps) {
     }
   };
 
+  const confidenceClasses =
+    confidence === 'high'
+      ? 'bg-emerald-100 text-emerald-800'
+      : confidence === 'medium'
+      ? 'bg-amber-100 text-amber-800'
+      : 'bg-slate-100 text-slate-700';
+
   return (
     <div className={clsx('animate-slide-in rounded-pill border-2 p-lg', getBgColor())}>
       <div className="flex items-start gap-lg">
         <div className="text-2xl">{getIcon()}</div>
-        <p className={clsx('text-sm font-medium leading-relaxed', getTextColor())}>
-          {insight.message}
-        </p>
+        <div className="min-w-0 flex-1">
+          <div className="mb-sm flex items-center justify-between gap-md">
+            <span className={clsx('inline-flex rounded-full px-sm py-1 text-xs font-semibold uppercase tracking-wide', confidenceClasses)}>
+              {confidence} confidence
+            </span>
+            {typeof insight.sampleSize === 'number' && (
+              <span className="text-xs text-gray-500">n={insight.sampleSize}</span>
+            )}
+          </div>
+          <p className={clsx('text-sm font-medium leading-relaxed', getTextColor())}>{insight.message}</p>
+          {insight.confidenceNote && (
+            <p className="mt-sm text-xs text-gray-600">{insight.confidenceNote}</p>
+          )}
+        </div>
       </div>
     </div>
   );

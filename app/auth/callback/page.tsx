@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase';
+import { reportError } from '@/lib/monitoring';
 
 export default function AuthCallbackPage() {
   const router = useRouter();
@@ -17,7 +18,7 @@ export default function AuthCallbackPage() {
       );
 
       if (error) {
-        console.error('Auth callback error:', error);
+        reportError(error, '/auth/callback', { action: 'exchangeCodeForSession' });
         router.push('/auth/login');
       } else {
         router.push('/');

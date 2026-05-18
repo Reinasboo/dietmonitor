@@ -10,6 +10,7 @@ interface AuthFormProps {
   onSubmit: (email: string, password: string) => Promise<void>;
   isLoading?: boolean;
   error?: string;
+  type?: 'login' | 'signup';
 }
 
 export interface LoginFormProps extends AuthFormProps {
@@ -20,7 +21,7 @@ export interface SignupFormProps extends AuthFormProps {
   type: 'signup';
 }
 
-export function AuthForm({ onSubmit, isLoading = false, error }: AuthFormProps) {
+export function AuthForm({ onSubmit, isLoading = false, error, type }: AuthFormProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [localError, setLocalError] = useState<string | null>(null);
@@ -48,6 +49,7 @@ export function AuthForm({ onSubmit, isLoading = false, error }: AuthFormProps) 
       <div>
         <Input
           type="email"
+          autoComplete="email"
           label="Email"
           placeholder="you@example.com"
           value={email}
@@ -60,6 +62,7 @@ export function AuthForm({ onSubmit, isLoading = false, error }: AuthFormProps) 
       <div>
         <Input
           type="password"
+          autoComplete={type === 'login' ? 'current-password' : 'new-password'}
           label="Password"
           placeholder="••••••••"
           value={password}

@@ -5,6 +5,7 @@ export { LogForm } from './LogForm';
 export { LogEntry } from './LogEntry';
 export { TimelineDay } from './TimelineDay';
 export { InsightCard } from './InsightCard';
+export { HomeSummary } from './HomeSummary';
 export { AuthForm, LoginForm, SignupForm } from './AuthForm';
 export { EmptyState, LoadingEntry, LoadingDay } from './Empty';
 export { WeeklySummary } from './WeeklySummary';

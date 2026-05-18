@@ -64,6 +64,12 @@ export type Database = {
           id: string;
           user_id: string;
           timezone: string;
+          reminder_enabled: boolean;
+          reminder_time: string | null;
+          weekly_steps_goal_days: number;
+          weekly_hydration_goal_days: number;
+          weekly_exercise_goal_days: number;
+          weekly_entry_goal_days: number;
           created_at: string;
           updated_at: string;
         };
@@ -71,6 +77,12 @@ export type Database = {
           id?: string;
           user_id: string;
           timezone?: string;
+          reminder_enabled?: boolean;
+          reminder_time?: string | null;
+          weekly_steps_goal_days?: number;
+          weekly_hydration_goal_days?: number;
+          weekly_exercise_goal_days?: number;
+          weekly_entry_goal_days?: number;
           created_at?: string;
           updated_at?: string;
         };
@@ -78,6 +90,12 @@ export type Database = {
           id?: string;
           user_id?: string;
           timezone?: string;
+          reminder_enabled?: boolean;
+          reminder_time?: string | null;
+          weekly_steps_goal_days?: number;
+          weekly_hydration_goal_days?: number;
+          weekly_exercise_goal_days?: number;
+          weekly_entry_goal_days?: number;
           created_at?: string;
           updated_at?: string;
         };

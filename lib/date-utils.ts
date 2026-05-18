@@ -7,6 +7,38 @@ import {
   differenceInDays,
 } from 'date-fns';
 
+export function parseTimezoneOffsetMinutes(timezone: string = 'UTC'): number {
+  if (!timezone || timezone === 'UTC') return 0;
+
+  const match = timezone.match(/^UTC([+-])(\d{1,2})(?::?(\d{2}))?$/i);
+  if (!match) return 0;
+
+  const sign = match[1] === '-' ? -1 : 1;
+  const hours = Number(match[2] || 0);
+  const minutes = Number(match[3] || 0);
+  return sign * (hours * 60 + minutes);
+}
+
+export function toTimezoneDate(date: Date, timezone: string = 'UTC'): Date {
+  const offsetMinutes = parseTimezoneOffsetMinutes(timezone);
+  return new Date(date.getTime() + offsetMinutes * 60_000);
+}
+
+export function getHourInTimezone(dateString: string, timezone: string = 'UTC'): number {
+  const shifted = toTimezoneDate(parseISO(dateString), timezone);
+  return shifted.getUTCHours();
+}
+
+export function getMinuteInTimezone(dateString: string, timezone: string = 'UTC'): number {
+  const shifted = toTimezoneDate(parseISO(dateString), timezone);
+  return shifted.getUTCMinutes();
+}
+
+export function getDayKeyInTimezone(dateString: string, timezone: string = 'UTC'): string {
+  const shifted = toTimezoneDate(parseISO(dateString), timezone);
+  return shifted.toISOString().split('T')[0];
+}
+
 export function formatTimeForDisplay(dateString: string): string {
   const date = parseISO(dateString);
   return format(date, 'h:mm a');
@@ -54,7 +86,10 @@ export function isDateInWeek(targetDate: Date, weekStart: Date): boolean {
   return targetDate >= weekStart && targetDate <= weekEnd;
 }
 
-export function getMondayOfWeek(date: Date = new Date()): string {
-  const monday = getWeekStart(date);
+export function getMondayOfWeek(date: Date = new Date(), timezone: string = 'UTC'): string {
+  const shifted = toTimezoneDate(date, timezone);
+  const day = shifted.getUTCDay();
+  const diff = shifted.getUTCDate() - day + (day === 0 ? -6 : 1);
+  const monday = new Date(Date.UTC(shifted.getUTCFullYear(), shifted.getUTCMonth(), diff));
   return monday.toISOString().split('T')[0];
 }

@@ -6,6 +6,7 @@ interface EntryStore {
   loading: boolean;
   error: string | null;
   setEntries: (entries: Entry[]) => void;
+  appendEntries: (entries: Entry[]) => void;
   addEntry: (entry: Entry) => void;
   removeEntry: (id: string) => void;
   updateEntry: (id: string, updates: Partial<Entry>) => void;
@@ -18,6 +19,10 @@ export const useEntryStore = create<EntryStore>((set) => ({
   loading: false,
   error: null,
   setEntries: (entries) => set({ entries }),
+  appendEntries: (entries) =>
+    set((state) => ({
+      entries: [...state.entries, ...entries],
+    })),
   addEntry: (entry) =>
     set((state) => ({
       entries: [entry, ...state.entries],
