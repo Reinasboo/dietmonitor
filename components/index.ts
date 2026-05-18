@@ -7,3 +7,4 @@ export { TimelineDay } from './TimelineDay';
 export { InsightCard } from './InsightCard';
 export { AuthForm, LoginForm, SignupForm } from './AuthForm';
 export { EmptyState, LoadingEntry, LoadingDay } from './Empty';
+export { WeeklySummary } from './WeeklySummary';

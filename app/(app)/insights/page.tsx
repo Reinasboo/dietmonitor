@@ -4,12 +4,13 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase';
 import { generateInsights, Insight, Entry } from '@/lib/patterns';
-import { InsightCard } from '@/components';
+import { InsightCard, WeeklySummary } from '@/components';
 import { getMondayOfWeek } from '@/lib/date-utils';
 import { Lightbulb } from 'lucide-react';
 
 export default function InsightsPage() {
   const [insights, setInsights] = useState<Insight[]>([]);
+  const [entries, setEntries] = useState<Entry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
@@ -42,8 +43,10 @@ export default function InsightsPage() {
 
         if (fetchError) throw new Error(fetchError.message);
 
-        const generatedInsights = generateInsights((data || []) as Entry[]);
+        const fetched = (data || []) as Entry[];
+        const generatedInsights = generateInsights(fetched);
         setInsights(generatedInsights);
+        setEntries(fetched);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load insights');
       } finally {
@@ -87,6 +90,7 @@ export default function InsightsPage() {
         </div>
       ) : (
         <div className="space-y-lg">
+          <WeeklySummary entries={entries} />
           {insights.map((insight, idx) => (
             <InsightCard key={idx} insight={insight} />
           ))}
