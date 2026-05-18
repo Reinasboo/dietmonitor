@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Clock, Send } from 'lucide-react';
+import { Clock, Send, Info } from 'lucide-react';
 import { Button } from './Button';
 import { Input } from './Input';
 import { format, parseISO } from 'date-fns';
@@ -86,38 +86,45 @@ export function LogForm({ onSubmit, isLoading = false }: LogFormProps) {
               />
             </div>
 
-            <div className="w-40">
-              <label className="block text-xs font-semibold uppercase tracking-wide text-lilac-700 mb-md">
-                Steps
-              </label>
-              <input
-                type="number"
-                min={0}
-                placeholder="e.g., 6000"
-                value={steps}
-                onChange={(e) => setSteps(e.target.value)}
-                className="w-full rounded-pill border-2 border-lilac-200 bg-white px-lg py-md text-sm font-medium focus:border-lilac-500 focus:outline-none focus:ring-2 focus:ring-lilac-500"
-              />
-            </div>
+            <div className="flex items-end gap-md">
+              <div className="w-40">
+                <label className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-lilac-700 mb-md">
+                  <span>Steps</span>
+                  <Info size={14} className="text-gray-400" title="Daily steps (benchmark: 6,000)" />
+                </label>
+                <input
+                  type="number"
+                  min={0}
+                  placeholder="e.g., 6000"
+                  value={steps}
+                  onChange={(e) => setSteps(e.target.value)}
+                  className="w-full rounded-pill border-2 border-lilac-200 bg-white px-lg py-md text-sm font-medium focus:border-lilac-500 focus:outline-none focus:ring-2 focus:ring-lilac-500"
+                />
+                <p className="text-xs text-gray-400 mt-1">Benchmark: 6,000 steps/day</p>
+              </div>
 
-            <div className="w-32">
-              <label className="block text-xs font-semibold uppercase tracking-wide text-lilac-700 mb-md">
-                Water
-              </label>
-              <input
-                type="number"
-                min={0}
-                value={waterSachets}
-                onChange={(e) => setWaterSachets(e.target.value)}
-                className="w-full rounded-pill border-2 border-lilac-200 bg-white px-lg py-md text-sm font-medium focus:border-lilac-500 focus:outline-none focus:ring-2 focus:ring-lilac-500"
-              />
-            </div>
+              <div className="w-32">
+                <label className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-lilac-700 mb-md">
+                  <span>Water</span>
+                  <Info size={14} className="text-gray-400" title="Number of water sachets consumed today" />
+                </label>
+                <input
+                  type="number"
+                  min={0}
+                  value={waterSachets}
+                  onChange={(e) => setWaterSachets(e.target.value)}
+                  className="w-full rounded-pill border-2 border-lilac-200 bg-white px-lg py-md text-sm font-medium focus:border-lilac-500 focus:outline-none focus:ring-2 focus:ring-lilac-500"
+                />
+                <p className="text-xs text-gray-400 mt-1">Avg target: 2 sachets/day</p>
+              </div>
 
-            <div className="flex items-center gap-sm">
-              <label className="block text-xs font-semibold uppercase tracking-wide text-lilac-700 mb-md mr-2">
-                Exercised
-              </label>
-              <input type="checkbox" checked={exercised} onChange={(e) => setExercised(e.target.checked)} />
+              <div className="flex items-center gap-sm">
+                <label className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-lilac-700 mb-md mr-2">
+                  <span>Exercised</span>
+                  <Info size={14} className="text-gray-400" title="Check if you exercised today" />
+                </label>
+                <input type="checkbox" checked={exercised} onChange={(e) => setExercised(e.target.checked)} />
+              </div>
             </div>
 
             {/* Submit button */}

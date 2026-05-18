@@ -11,7 +11,14 @@ export interface Entry {
 }
 
 export interface Insight {
-  type: 'late_night' | 'early_morning' | 'repeated_meal' | 'snack_frequency';
+  type:
+    | 'late_night'
+    | 'early_morning'
+    | 'repeated_meal'
+    | 'snack_frequency'
+    | 'steps_goal'
+    | 'hydration'
+    | 'exercise_frequency';
   message: string;
   count?: number;
   time?: string;
@@ -143,7 +150,113 @@ export function generateInsights(entries: Entry[]): Insight[] {
   const snacks = detectSnackFrequency(entries);
   if (snacks) insights.push(snacks);
 
+  const steps = detectStepsGoal(entries);
+  if (steps) insights.push(steps);
+
+  const hydration = detectHydration(entries);
+  if (hydration) insights.push(hydration);
+
+  const exercise = detectExerciseFrequency(entries);
+  if (exercise) insights.push(exercise);
+
   return insights;
+}
+
+/**
+ * Steps goal detection: counts days in the provided entries where steps >= 6000
+ */
+export function detectStepsGoal(entries: Entry[]): Insight | null {
+  if (!entries.length) return null;
+
+  // group by day and take the latest steps value for the day (or any non-null)
+  const dayMap: Record<string, number> = {};
+  entries.forEach((e) => {
+    if (e.steps == null) return;
+    const day = startOfDay(parseISO(e.logged_at)).toISOString();
+    // keep max steps for the day
+    dayMap[day] = Math.max(dayMap[day] || 0, e.steps ?? 0);
+  });
+
+  const days = Object.keys(dayMap).length;
+  if (days === 0) return null;
+
+  const goalMet = Object.values(dayMap).filter((s) => s >= 6000).length;
+
+  if (goalMet === 0) {
+    return {
+      type: 'steps_goal',
+      message: `You didn't record any days meeting the 6,000 steps benchmark this week.`,
+      count: 0,
+    };
+  }
+
+  return {
+    type: 'steps_goal',
+    message: `You met the 6,000 steps benchmark on ${goalMet} of ${Math.max(7, days)} tracked days this week.`,
+    count: goalMet,
+  };
+}
+
+/**
+ * Hydration detection: average water sachets per tracked day
+ */
+export function detectHydration(entries: Entry[]): Insight | null {
+  if (!entries.length) return null;
+
+  const dayMap: Record<string, number> = {};
+  entries.forEach((e) => {
+    const day = startOfDay(parseISO(e.logged_at)).toISOString();
+    dayMap[day] = (dayMap[day] || 0) + (e.water_sachets ?? 0);
+  });
+
+  const days = Object.keys(dayMap).length;
+  if (days === 0) return null;
+
+  const total = Object.values(dayMap).reduce((a, b) => a + b, 0);
+  const avg = total / days;
+
+  if (avg < 2) {
+    return {
+      type: 'hydration',
+      message: `Your average water intake is ${avg.toFixed(1)} sachets/day — try for at least 2/day.`,
+      count: Math.round(avg),
+    };
+  }
+
+  return {
+    type: 'hydration',
+    message: `Good hydration — average ${avg.toFixed(1)} sachets/day this week.`,
+    count: Math.round(avg),
+  };
+}
+
+/**
+ * Exercise frequency: count unique days with exercised === true
+ */
+export function detectExerciseFrequency(entries: Entry[]): Insight | null {
+  if (!entries.length) return null;
+
+  const exercisedDays = new Set<string>();
+  entries.forEach((e) => {
+    if (e.exercised) {
+      exercisedDays.add(startOfDay(parseISO(e.logged_at)).toISOString());
+    }
+  });
+
+  const count = exercisedDays.size;
+  if (count === 0) {
+    return {
+      type: 'exercise_frequency',
+      message: 'No exercise recorded this week. Even short activity counts — try a quick walk.',
+      count: 0,
+    };
+  }
+
+  return {
+    type: 'exercise_frequency',
+    message: `You recorded exercise on ${count} day${count > 1 ? 's' : ''} this week.`,
+    count,
+  };
 }
 
 /**

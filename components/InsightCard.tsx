@@ -20,6 +20,12 @@ export function InsightCard({ insight }: InsightCardProps) {
         return '🔄';
       case 'snack_frequency':
         return '🍿';
+      case 'steps_goal':
+        return '👟';
+      case 'hydration':
+        return '💧';
+      case 'exercise_frequency':
+        return '🏃';
       default:
         return '💡';
     }
@@ -35,6 +41,12 @@ export function InsightCard({ insight }: InsightCardProps) {
         return 'bg-green-50 border-green-200';
       case 'snack_frequency':
         return 'bg-yellow-50 border-yellow-200';
+      case 'steps_goal':
+        return 'bg-emerald-50 border-emerald-200';
+      case 'hydration':
+        return 'bg-cyan-50 border-cyan-200';
+      case 'exercise_frequency':
+        return 'bg-rose-50 border-rose-200';
       default:
         return 'bg-lilac-50 border-lilac-200';
     }
@@ -50,6 +62,12 @@ export function InsightCard({ insight }: InsightCardProps) {
         return 'text-green-900';
       case 'snack_frequency':
         return 'text-yellow-900';
+      case 'steps_goal':
+        return 'text-emerald-900';
+      case 'hydration':
+        return 'text-cyan-900';
+      case 'exercise_frequency':
+        return 'text-rose-900';
       default:
         return 'text-lilac-900';
     }
