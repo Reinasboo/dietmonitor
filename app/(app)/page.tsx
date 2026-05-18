@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase';
 import { useEntryStore } from '@/lib/store';
 import { groupEntriesByDay } from '@/lib/patterns';
@@ -11,6 +12,7 @@ export default function HomePage() {
   const { entries, loading, error, setEntries, setLoading, setError, addEntry, removeEntry, updateEntry } =
     useEntryStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
 
   // Fetch entries on mount
   useEffect(() => {
@@ -24,7 +26,7 @@ export default function HomePage() {
         } = await supabase.auth.getSession();
 
         if (!session) {
-          setError('Not authenticated');
+          router.push('/auth/login');
           return;
         }
 
@@ -55,7 +57,7 @@ export default function HomePage() {
       } = await supabase.auth.getSession();
 
       if (!session) {
-        setError('Not authenticated');
+        router.push('/auth/login');
         return;
       }
 

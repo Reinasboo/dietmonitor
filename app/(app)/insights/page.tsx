@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase';
 import { generateInsights, Insight, Entry } from '@/lib/patterns';
 import { InsightCard } from '@/components';
@@ -11,6 +12,7 @@ export default function InsightsPage() {
   const [insights, setInsights] = useState<Insight[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const supabase = createClient();
@@ -23,7 +25,7 @@ export default function InsightsPage() {
         } = await supabase.auth.getSession();
 
         if (!session) {
-          setError('Not authenticated');
+          router.push('/auth/login');
           return;
         }
 
