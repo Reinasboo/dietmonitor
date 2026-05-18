@@ -90,7 +90,7 @@ export function LogForm({ onSubmit, isLoading = false }: LogFormProps) {
               <div className="w-40">
                 <label className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-lilac-700 mb-md">
                   <span>Steps</span>
-                  <Info size={14} className="text-gray-400" title="Daily steps (benchmark: 6,000)" />
+                  <Info size={14} className="text-gray-400"  />
                 </label>
                 <input
                   type="number"
@@ -106,7 +106,7 @@ export function LogForm({ onSubmit, isLoading = false }: LogFormProps) {
               <div className="w-32">
                 <label className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-lilac-700 mb-md">
                   <span>Water</span>
-                  <Info size={14} className="text-gray-400" title="Number of water sachets consumed today" />
+                  <Info size={14} className="text-gray-400"  />
                 </label>
                 <input
                   type="number"
@@ -121,7 +121,7 @@ export function LogForm({ onSubmit, isLoading = false }: LogFormProps) {
               <div className="flex items-center gap-sm">
                 <label className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-lilac-700 mb-md mr-2">
                   <span>Exercised</span>
-                  <Info size={14} className="text-gray-400" title="Check if you exercised today" />
+                  <Info size={14} className="text-gray-400"  />
                 </label>
                 <input type="checkbox" checked={exercised} onChange={(e) => setExercised(e.target.checked)} />
               </div>
