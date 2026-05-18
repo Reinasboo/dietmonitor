@@ -4,6 +4,7 @@
 
 :root {
   color-scheme: light;
+  --surface: rgba(255, 255, 255, 0.72);
 }
 
 html {
@@ -13,16 +14,15 @@ html {
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-/* Smooth transitions */
-* {
-  @apply transition-colors duration-200;
+  background:
+    radial-gradient(circle at top left, rgba(139, 92, 246, 0.12), transparent 32%),
+    radial-gradient(circle at top right, rgba(245, 158, 11, 0.09), transparent 28%),
+    linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
 }
 
 button,
 a {
-  @apply transition-all duration-200;
+  @apply transition-colors duration-150;
 }
 
 /* Scrollbar styling */
@@ -59,6 +59,17 @@ input[type='number'] {
 :focus-visible {
   outline: 2px solid #8b5cf6;
   outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* Animations */

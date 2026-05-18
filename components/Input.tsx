@@ -16,7 +16,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="w-full">
         {label && (
-          <label htmlFor={inputId} className="block text-sm font-medium text-gray-900 mb-md">
+          <label htmlFor={inputId} className="mb-md block text-sm font-medium text-gray-900">
             {label}
           </label>
         )}
@@ -24,9 +24,9 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           id={inputId}
           ref={ref}
           className={clsx(
-            'w-full px-lg py-md text-sm font-medium rounded-pill border-2 transition-colors',
+            'w-full rounded-pill border-2 px-lg py-md text-sm font-medium transition-[border-color,box-shadow,background-color] duration-150 ease-out',
             'placeholder:text-gray-400',
-            'focus:outline-none focus:ring-2 focus:ring-lilac-500 focus:border-lilac-500',
+            'focus:outline-none focus:ring-2 focus:ring-lilac-500 focus:border-lilac-500 bg-white',
             error
               ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
               : 'border-gray-200 hover:border-gray-300',

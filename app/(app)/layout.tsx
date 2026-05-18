@@ -51,13 +51,15 @@ export default function AppLayout({
   if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-lilac-200 border-t-lilac-600" />
+        <div className="rounded-3xl border border-gray-200 bg-white/80 px-6 py-5 shadow-lg backdrop-blur">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-lilac-200 border-t-lilac-600" />
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       <Header onLogout={handleLogout} />
       <main className="mx-auto max-w-2xl px-lg py-2xl">{children}</main>
     </div>

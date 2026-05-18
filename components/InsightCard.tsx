@@ -82,9 +82,11 @@ export function InsightCard({ insight }: InsightCardProps) {
       : 'bg-slate-100 text-slate-700';
 
   return (
-    <div className={clsx('animate-slide-in rounded-pill border-2 p-lg', getBgColor())}>
+    <div className={clsx('animate-slide-in rounded-3xl border-2 p-lg shadow-sm', getBgColor())}>
       <div className="flex items-start gap-lg">
-        <div className="text-2xl">{getIcon()}</div>
+        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/80 text-2xl shadow-sm">
+          {getIcon()}
+        </div>
         <div className="min-w-0 flex-1">
           <div className="mb-sm flex items-center justify-between gap-md">
             <span className={clsx('inline-flex rounded-full px-sm py-1 text-xs font-semibold uppercase tracking-wide', confidenceClasses)}>

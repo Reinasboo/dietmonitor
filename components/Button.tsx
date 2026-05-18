@@ -11,17 +11,17 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ variant = 'primary', size = 'md', isLoading = false, className, children, ...props }, ref) => {
-    const baseStyles = 'font-medium transition-all duration-200 rounded-pill focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2';
+    const baseStyles = 'font-medium rounded-pill focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-[transform,box-shadow,background-color,color,border-color,opacity] duration-150 ease-out active:translate-y-px';
 
     const variantStyles = {
       primary:
-        'bg-lilac-600 text-white hover:bg-lilac-700 focus:ring-lilac-500 active:scale-95',
+        'bg-lilac-600 text-white shadow-sm shadow-lilac-600/15 hover:bg-lilac-700 hover:shadow-md hover:shadow-lilac-600/20 focus:ring-lilac-500',
       secondary:
-        'bg-gray-100 text-gray-900 hover:bg-gray-200 focus:ring-gray-400 active:scale-95',
+        'bg-white text-gray-900 border border-gray-200 shadow-sm hover:bg-gray-50 hover:border-gray-300 hover:shadow-md focus:ring-gray-400',
       tertiary:
         'bg-transparent text-lilac-600 hover:bg-lilac-50 focus:ring-lilac-500',
       danger:
-        'bg-red-500 text-white hover:bg-red-600 focus:ring-red-500 active:scale-95',
+        'bg-red-500 text-white shadow-sm shadow-red-500/15 hover:bg-red-600 hover:shadow-md hover:shadow-red-500/20 focus:ring-red-500',
     };
 
     const sizeStyles = {

@@ -91,7 +91,7 @@ export function HomeSummary({ entries, timezone = 'UTC', progress, onFilterSelec
   };
 
   return (
-    <section className="space-y-lg rounded-3xl border-2 border-gray-200 bg-white p-2xl shadow-sm">
+    <section className="space-y-lg rounded-[2rem] border border-white/70 bg-white/80 p-2xl shadow-[0_20px_60px_rgba(15,23,42,0.08)] backdrop-blur">
       <div className="flex flex-wrap items-end justify-between gap-lg">
         <div>
           <h2 className="text-lg font-bold text-gray-900">Today at a glance</h2>
