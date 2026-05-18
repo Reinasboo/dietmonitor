@@ -48,7 +48,13 @@ export default function HomePage() {
     fetchEntries();
   }, [setEntries, setLoading, setError]);
 
-  const handleLogEntry = async (content: string, loggedAt: Date) => {
+  const handleLogEntry = async (
+    content: string,
+    loggedAt: Date,
+    steps?: number | null,
+    waterSachets?: number,
+    exercised?: boolean
+  ) => {
     const supabase = createClient();
     setIsSubmitting(true);
     try {
@@ -68,6 +74,9 @@ export default function HomePage() {
             user_id: session.user.id,
             content,
             logged_at: loggedAt.toISOString(),
+            steps: steps ?? null,
+            water_sachets: waterSachets ?? 0,
+            exercised: exercised ?? false,
           },
         ])
         .select()
@@ -94,7 +103,14 @@ export default function HomePage() {
     }
   };
 
-  const handleUpdateEntry = async (id: string, content: string, loggedAt: string) => {
+  const handleUpdateEntry = async (
+    id: string,
+    content: string,
+    loggedAt: string,
+    steps?: number | null,
+    waterSachets?: number,
+    exercised?: boolean
+  ) => {
     const supabase = createClient();
     try {
       const { error: updateError } = await supabase
@@ -102,6 +118,9 @@ export default function HomePage() {
         .update({
           content,
           logged_at: loggedAt,
+          steps: steps ?? null,
+          water_sachets: waterSachets ?? 0,
+          exercised: exercised ?? false,
         })
         .eq('id', id);
 
@@ -109,6 +128,9 @@ export default function HomePage() {
       updateEntry(id, {
         content,
         logged_at: loggedAt,
+        steps: steps ?? null,
+        water_sachets: waterSachets ?? 0,
+        exercised: exercised ?? false,
       });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to update entry');

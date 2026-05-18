@@ -9,7 +9,14 @@ import { format, parseISO } from 'date-fns';
 interface LogEntryProps {
   entry: Entry;
   onDelete: (id: string) => Promise<void>;
-  onUpdate: (id: string, content: string, loggedAt: string) => Promise<void>;
+  onUpdate: (
+    id: string,
+    content: string,
+    loggedAt: string,
+    steps?: number | null,
+    waterSachets?: number,
+    exercised?: boolean
+  ) => Promise<void>;
 }
 
 export function LogEntry({ entry, onDelete, onUpdate }: LogEntryProps) {
@@ -18,6 +25,9 @@ export function LogEntry({ entry, onDelete, onUpdate }: LogEntryProps) {
   const [editLoggedAt, setEditLoggedAt] = useState(
     format(parseISO(entry.logged_at), "yyyy-MM-dd'T'HH:mm")
   );
+  const [editSteps, setEditSteps] = useState<string>(entry.steps == null ? '' : String(entry.steps));
+  const [editWater, setEditWater] = useState<string>(String(entry.water_sachets ?? 0));
+  const [editExercised, setEditExercised] = useState<boolean>(!!entry.exercised);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
 
@@ -39,7 +49,14 @@ export function LogEntry({ entry, onDelete, onUpdate }: LogEntryProps) {
 
     setIsUpdating(true);
     try {
-      await onUpdate(entry.id, editContent.trim(), parseISO(editLoggedAt).toISOString());
+      await onUpdate(
+        entry.id,
+        editContent.trim(),
+        parseISO(editLoggedAt).toISOString(),
+        editSteps === '' ? null : Number(editSteps),
+        Number(editWater || 0),
+        editExercised
+      );
       setIsEditing(false);
     } finally {
       setIsUpdating(false);
@@ -69,6 +86,26 @@ export function LogEntry({ entry, onDelete, onUpdate }: LogEntryProps) {
               onChange={(e) => setEditLoggedAt(e.target.value)}
               className="flex-1 rounded-pill border-2 border-lilac-200 bg-white px-lg py-md text-sm font-medium focus:border-lilac-500 focus:outline-none focus:ring-2 focus:ring-lilac-500"
             />
+            <input
+              type="number"
+              min={0}
+              placeholder="steps"
+              value={editSteps}
+              onChange={(e) => setEditSteps(e.target.value)}
+              className="w-28 rounded-pill border-2 border-lilac-200 bg-white px-lg py-md text-sm font-medium"
+            />
+            <input
+              type="number"
+              min={0}
+              placeholder="water"
+              value={editWater}
+              onChange={(e) => setEditWater(e.target.value)}
+              className="w-20 rounded-pill border-2 border-lilac-200 bg-white px-lg py-md text-sm font-medium"
+            />
+            <label className="flex items-center gap-sm">
+              <input type="checkbox" checked={editExercised} onChange={(e) => setEditExercised(e.target.checked)} />
+              <span className="text-xs text-gray-500">Ex</span>
+            </label>
             <button
               onClick={handleUpdate}
               disabled={isUpdating}
@@ -96,6 +133,17 @@ export function LogEntry({ entry, onDelete, onUpdate }: LogEntryProps) {
           <div className="mt-md flex items-center gap-sm text-xs text-gray-500">
             <Clock size={12} />
             <time dateTime={entry.logged_at}>{formatTimeForDisplay(entry.logged_at)}</time>
+          </div>
+
+          <div className="mt-sm text-xs text-gray-600">
+            {typeof entry.steps === 'number' && (
+              <div>
+                Steps: <span className={entry.steps >= 6000 ? 'text-green-600 font-semibold' : 'text-gray-700'}>{entry.steps}</span>
+                <span className="ml-2 text-xs text-gray-500">(goal: 6,000)</span>
+              </div>
+            )}
+            <div>Water (sachets): {entry.water_sachets ?? 0}</div>
+            <div>Exercised: {entry.exercised ? 'Yes' : 'No'}</div>
           </div>
         </div>
 

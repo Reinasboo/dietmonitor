@@ -8,6 +8,9 @@ export type Database = {
           content: string;
           created_at: string;
           logged_at: string;
+          steps: number | null;
+          water_sachets: number;
+          exercised: boolean;
         };
         Insert: {
           id?: string;
@@ -15,6 +18,9 @@ export type Database = {
           content: string;
           created_at?: string;
           logged_at: string;
+          steps?: number | null;
+          water_sachets?: number;
+          exercised?: boolean;
         };
         Update: {
           id?: string;
@@ -22,6 +28,9 @@ export type Database = {
           content?: string;
           created_at?: string;
           logged_at?: string;
+          steps?: number | null;
+          water_sachets?: number;
+          exercised?: boolean;
         };
       };
       insights: {

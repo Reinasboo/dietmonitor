@@ -5,6 +5,9 @@ export interface Entry {
   content: string;
   logged_at: string;
   created_at: string;
+  steps?: number | null;
+  water_sachets?: number;
+  exercised?: boolean;
 }
 
 export interface Insight {
