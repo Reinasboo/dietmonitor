@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import { Database } from '@/lib/database.types';
 import { createAuthenticatedSupabase } from '@/lib/server-auth';
 
 function toCsv(rows: Array<Record<string, unknown>>): string {
