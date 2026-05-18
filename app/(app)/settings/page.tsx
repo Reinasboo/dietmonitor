@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase';
 import { Button, Input } from '@/components';
 import { ArrowLeft, Bell, Download, Lock, User } from 'lucide-react';
 import { reportError, trackEvent } from '@/lib/monitoring';
+import { downloadWithAuth, fetchWithAuth } from '@/lib/auth-fetch';
 
 interface ReminderSuggestion {
   timeLabel: string;
@@ -87,7 +88,7 @@ export default function SettingsPage() {
   const loadReminderSuggestion = async () => {
     setReminderLoading(true);
     try {
-      const response = await fetch('/api/reminders');
+      const response = await fetchWithAuth('/api/reminders');
       if (!response.ok) {
         throw new Error('Failed to load reminder suggestion');
       }
@@ -149,6 +150,16 @@ export default function SettingsPage() {
       reportError(err, '/settings', { action: 'save_settings' });
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleExport = async (format: 'json' | 'csv') => {
+    try {
+      await downloadWithAuth(`/api/export?format=${format}`, `mindful-entries.${format}`);
+      trackEvent('export_clicked', { format }, '/settings');
+    } catch (err) {
+      setSettingsError(err instanceof Error ? err.message : 'Failed to export data');
+      reportError(err, '/settings', { action: 'export_data', format });
     }
   };
 
@@ -311,22 +322,14 @@ export default function SettingsPage() {
           Download your data anytime in JSON or CSV format.
         </p>
         <div className="flex flex-wrap gap-sm">
-          <a
-            href="/api/export?format=json"
-            className="inline-flex items-center gap-2 rounded-pill bg-gray-100 px-md py-sm text-xs font-medium text-gray-900 transition-colors hover:bg-gray-200"
-            onClick={() => trackEvent('export_clicked', { format: 'json' }, '/settings')}
-          >
+          <Button variant="secondary" size="sm" onClick={() => handleExport('json')}>
             <Download size={14} />
             Export JSON
-          </a>
-          <a
-            href="/api/export?format=csv"
-            className="inline-flex items-center gap-2 rounded-pill bg-gray-100 px-md py-sm text-xs font-medium text-gray-900 transition-colors hover:bg-gray-200"
-            onClick={() => trackEvent('export_clicked', { format: 'csv' }, '/settings')}
-          >
+          </Button>
+          <Button variant="secondary" size="sm" onClick={() => handleExport('csv')}>
             <Download size={14} />
             Export CSV
-          </a>
+          </Button>
         </div>
       </div>
 

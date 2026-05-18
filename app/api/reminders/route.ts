@@ -1,15 +1,10 @@
 import { NextResponse } from 'next/server';
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
 import { Database } from '@/lib/database.types';
 import { Entry, generateReminderSuggestion } from '@/lib/patterns';
+import { createAuthenticatedSupabase } from '@/lib/server-auth';
 
-export async function GET() {
-  const supabase = createRouteHandlerClient<Database>({ cookies });
-  const {
-    data: { user },
-    error: userError,
-  } = await supabase.auth.getUser();
+export async function GET(request: Request) {
+  const { supabase, user, error: userError } = await createAuthenticatedSupabase(request);
 
   if (userError || !user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });

@@ -1,6 +1,4 @@
 import { NextResponse } from 'next/server';
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
 import { Database } from '@/lib/database.types';
 import {
   Entry,
@@ -9,6 +7,7 @@ import {
   generateInsights,
 } from '@/lib/patterns';
 import { getMondayOfWeek } from '@/lib/date-utils';
+import { createAuthenticatedSupabase } from '@/lib/server-auth';
 
 type InsightInsert = Database['public']['Tables']['insights']['Insert'];
 
@@ -33,14 +32,9 @@ function parseCachedInsights(data: Array<Record<string, unknown>>): Insight[] {
 }
 
 export async function GET(request: Request) {
-  const supabase = createRouteHandlerClient<Database>({ cookies });
   const url = new URL(request.url);
   const refresh = url.searchParams.get('refresh') === '1';
-
-  const {
-    data: { user },
-    error: userError,
-  } = await supabase.auth.getUser();
+  const { supabase, user, error: userError } = await createAuthenticatedSupabase(request);
 
   if (userError || !user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });

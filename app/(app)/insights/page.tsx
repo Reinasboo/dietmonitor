@@ -7,6 +7,7 @@ import { InsightCard, WeeklySummary } from '@/components';
 import { Lightbulb, RefreshCw } from 'lucide-react';
 import { Button } from '@/components';
 import { reportError, trackEvent } from '@/lib/monitoring';
+import { fetchWithAuth } from '@/lib/auth-fetch';
 
 interface InsightsApiResponse {
   insights: Insight[];
@@ -33,7 +34,7 @@ export default function InsightsPage() {
     }
 
     try {
-      const response = await fetch(`/api/insights${forceRefresh ? '?refresh=1' : ''}`, {
+      const response = await fetchWithAuth(`/api/insights${forceRefresh ? '?refresh=1' : ''}`, {
         method: 'GET',
       });
 

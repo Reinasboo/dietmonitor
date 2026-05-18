@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
 import { Database } from '@/lib/database.types';
+import { createAuthenticatedSupabase } from '@/lib/server-auth';
 
 function toCsv(rows: Array<Record<string, unknown>>): string {
   if (!rows.length) {
@@ -22,11 +21,7 @@ function toCsv(rows: Array<Record<string, unknown>>): string {
 }
 
 export async function GET(request: Request) {
-  const supabase = createRouteHandlerClient<Database>({ cookies });
-  const {
-    data: { user },
-    error: userError,
-  } = await supabase.auth.getUser();
+  const { supabase, user, error: userError } = await createAuthenticatedSupabase(request);
 
   if (userError || !user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
