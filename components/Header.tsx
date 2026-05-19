@@ -1,7 +1,8 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { createClient } from '@/lib/supabase';
 import { LogOut, Settings, TrendingUp } from 'lucide-react';
 
 interface HeaderProps {
@@ -9,19 +10,60 @@ interface HeaderProps {
 }
 
 export function Header({ onLogout }: HeaderProps) {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const supabase = createClient();
+    let mounted = true;
+
+    const check = async () => {
+      try {
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+        if (mounted) setIsLoggedIn(!!session);
+      } catch {
+        if (mounted) setIsLoggedIn(false);
+      }
+    };
+
+    check();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (mounted) setIsLoggedIn(!!session);
+    });
+
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
+  }, []);
+
+  const logo = (
+    <>
+      <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-lilac-500 via-lilac-600 to-gold-500 shadow-md shadow-lilac-500/20">
+        <span className="font-mono text-sm font-bold text-white">m</span>
+      </div>
+      <div>
+        <h1 className="text-sm font-semibold tracking-wide text-gray-900">Mindful</h1>
+        <p className="text-[11px] text-gray-500">Private food logging</p>
+      </div>
+    </>
+  );
+
   return (
     <header className="sticky top-0 z-40 border-b border-white/60 bg-white/75 backdrop-blur-xl">
       <div className="mx-auto max-w-2xl px-lg py-md">
         <div className="flex items-center justify-between gap-md">
-          <div className="flex items-center gap-md">
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-lilac-500 via-lilac-600 to-gold-500 shadow-md shadow-lilac-500/20">
-              <span className="font-mono text-sm font-bold text-white">m</span>
-            </div>
-            <div>
-              <h1 className="text-sm font-semibold tracking-wide text-gray-900">Mindful</h1>
-              <p className="text-[11px] text-gray-500">Private food logging</p>
-            </div>
-          </div>
+          {isLoggedIn ? (
+            <Link href="/" className="flex items-center gap-md">
+              {logo}
+            </Link>
+          ) : (
+            <div className="flex items-center gap-md">{logo}</div>
+          )}
 
           <nav className="flex items-center gap-sm">
             <Link
